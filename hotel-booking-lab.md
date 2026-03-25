@@ -413,7 +413,7 @@ Server running on port 3001
 
 > แทรกรูปภาพที่นี่
 
----
+---![alt text](image.png)
 
 ## การทดลองที่ 2: การทดสอบ API ด้วย Postman
 
@@ -460,7 +460,7 @@ Server running on port 3001
 
 > แทรกรูปภาพที่นี่
 
----
+--- ![alt text](image-1.png)
 
 ### 2.3 การทดสอบ CRUD Operations
 
@@ -493,7 +493,7 @@ Headers: Content-Type: application/json
 > แทรกรูปภาพที่นี่
 
 ---
-
+![alt text](image-2.png)
 #### 2.3.2 ดึงข้อมูลทั้งหมด (GET All)
 
 > ต้องใช้ Token
@@ -510,7 +510,7 @@ Headers: Authorization: Bearer {{token}}
 
 > ⚠️ หาก response แจ้ง `"Token ไม่ถูกต้องหรือหมดอายุ"` ให้ Login ใหม่แล้วอัปเดต token ใน Globals
 
----
+--- ![alt text](image-3.png)
 
 #### 2.3.3 ดึงข้อมูลตาม ID (GET by ID)
 
@@ -524,7 +524,7 @@ Headers: Authorization: Bearer {{token}}
 
 > แทรกรูปภาพที่นี่
 
----
+--- ![alt text](image-4.png)
 
 #### 2.3.4 แก้ไขข้อมูลการจอง (PUT)
 
@@ -552,7 +552,7 @@ Headers: Authorization: Bearer {{token}}
 
 > แทรกรูปภาพที่นี่
 
----
+--- ![alt text](image-5.png)
 
 #### 2.3.5 ลบข้อมูลการจอง (DELETE)
 
@@ -566,7 +566,7 @@ Headers: Authorization: Bearer {{token}}
 
 > แทรกรูปภาพที่นี่
 
----
+--- ![alt text](image-6.png)
 
 ### 🔧 งานปรับปรุงโค้ด
 
