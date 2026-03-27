@@ -671,13 +671,13 @@ VITE_API_URL=http://localhost:3001
 
 ```bash
 npm run dev
-```
+``` 
 
 ### 📸 บันทึกผลการทดลอง: ผลการรัน Frontend เริ่มต้น
 
 > แทรกรูปภาพที่นี่
 
----
+--- ![alt text](image-7.png)
 
 ### 3.2 การสร้าง Components
 
