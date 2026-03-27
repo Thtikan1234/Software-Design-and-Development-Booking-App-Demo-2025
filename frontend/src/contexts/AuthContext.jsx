@@ -1,42 +1,48 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { AuthContext } from "./AuthContext";
 
-const AuthContext = createContext(null);
+// ฟังก์ชันดึงข้อมูลจาก localStorage
+const getSavedAuth = () => {
+  const savedToken = localStorage.getItem("token");
+  const savedUser = localStorage.getItem("user");
+
+  try {
+    if (savedToken && savedUser) {
+      return {
+        token: savedToken,
+        user: JSON.parse(savedUser),
+      };
+    }
+  } catch (error) {
+  console.error("Invalid user data:", error);
+}
+  return { token: null, user: null };
+};
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser]   = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [authData, setAuthData] = useState(() => getSavedAuth());
 
   useEffect(() => {
-    // โหลดข้อมูล login จาก localStorage เมื่อเปิดแอปใหม่
-    const savedToken = localStorage.getItem('token');
-    const savedUser  = localStorage.getItem('user');
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    if (authData.token && authData.user) {
+      localStorage.setItem("token", authData.token);
+      localStorage.setItem("user", JSON.stringify(authData.user));
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
-    setLoading(false);
-  }, []);
+  }, [authData]);
 
-  const login = (userData, newToken) => {
-    setUser(userData);
-    setToken(newToken);
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('user', JSON.stringify(userData));
+  const login = (token, user) => {
+    setAuthData({ token, user });
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    setAuthData({ token: null, user: null });
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ authData, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

@@ -1,121 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import BookingForm      from './components/BookingForm';
+import BookingList      from './components/BookingList';
+import BookingEdit      from './components/BookingEdit';
+import AdminDashboard   from './components/AdminDashboard';
+import ProtectedRoute   from './components/ProtectedRoute';
+import Login            from './components/Login';
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-100">
+          <NavBar />
+          <Routes>
+            <Route path="/"       element={<HomePage />} />
+            <Route path="/booking" element={<BookingForm />} />
+            <Route path="/login"  element={<Login />} />
+            <Route path="/admin"
+              element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/bookings"
+              element={<ProtectedRoute><BookingList /></ProtectedRoute>} />
+            <Route path="/admin/bookings/edit/:id"
+              element={<ProtectedRoute><BookingEdit /></ProtectedRoute>} />
+          </Routes>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+// Navigation Bar — แสดงปุ่ม Login หรือ Admin ตาม auth state
+const NavBar = () => {
+  const { user } = useAuth();
+  return (
+    <nav className="bg-white shadow-md">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          <Link to="/" className="text-xl font-bold">ระบบจองห้องพัก</Link>
+          <div className="space-x-4">
+            <Link to="/"        className="text-gray-600 hover:text-gray-900">หน้าแรก</Link>
+            <Link to="/booking" className="text-gray-600 hover:text-gray-900">จองห้องพัก</Link>
+            {user ? (
+              <Link to="/admin" className="text-gray-600 hover:text-gray-900">สำหรับผู้ดูแล</Link>
+            ) : (
+              <Link to="/login" className="text-blue-500 hover:text-blue-700 font-medium">เข้าสู่ระบบ</Link>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+const HomePage = () => (
+  <div className="container mx-auto px-4 py-8">
+    <h1 className="text-4xl font-bold text-center mb-8">ยินดีต้อนรับสู่ระบบจองห้องพัก</h1>
+    <div className="text-center">
+      <Link to="/booking"
+        className="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600">
+        จองห้องพักเลย
+      </Link>
+    </div>
+  </div>
+);
+
+export default App;
